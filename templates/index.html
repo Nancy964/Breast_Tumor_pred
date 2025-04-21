@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Breast Cancer Prediction</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: black; 
+            color: white; 
+        }
+        .card {
+            background: linear-gradient(135deg, #ff007f, #00bfff); 
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); 
+        }
+        .footer {
+            background-color: #222; 
+            color: white; 
+            text-align: center; 
+            padding: 50px; 
+            position: relative; 
+            bottom: 0; 
+            width: 100%; 
+            margin-top: 50px; 
+        }
+        .logo {
+            width: 100px; 
+            position: absolute; 
+            top: 20px; 
+            left: 20px; 
+        }
+        .input-field {
+            background: linear-gradient(black, grey); 
+            color: white; 
+        }
+        .form-label {
+            font-weight: bold; 
+            padding:10px;
+        }
+        .btn-primary {
+            background-color: rgb(25, 220, 246); 
+            border-color: blue; 
+        }
+        .btn-secondary {
+            background-color: rgb(221, 33, 143); 
+            border-color: pink; 
+        }
+        .heading {
+            text-align: center; 
+            margin-top: 80px; 
+            margin-bottom: 20px; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img class="logo" src="{{url_for('static',filename='logo.jpg')}}" alt="Logo"> 
+        <h1 class="heading">BREAST CANCER PREDICTION MODEL</h1>
+
+        <img style="width:300px; height:250px;" src="{{url_for('static',filename='5.webp')}}" alt="">
+        <img style="width:300px; height:250px;" src="{{url_for('static',filename='6.jpg')}}" alt="">
+        <img style="width:400px; height:250px;" src="{{url_for('static',filename='6.webp')}}" alt="">
+        <img style="width:270px; height:250px;" src="{{url_for('static',filename='7.webp')}}" alt="">
+
+        <form action="/predict" method="POST">
+            <div class="mb-3">
+                <label for="radius_mean" class="form-label">Radius Mean</label>
+                <input type="number" name="radius_mean" class="form-control input-field" id="radius_mean" value="{{ input_values.radius_mean }}" min="-1" max="1" step="0.01" required>
+            </div>
+            <div class="mb-3">
+                <label for="texture_mean" class="form-label">Texture Mean</label>
+                <input type="number" name="texture_mean" class="form-control input-field" id="texture_mean" value="{{ input_values.texture_mean }}" min="-1" max="1" step="0.01" required>
+            </div>
+            <div class="mb-3">
+                <label for="perimeter_mean" class="form-label">Perimeter Mean</label>
+                <input type="number" name="perimeter_mean" class="form-control input-field" id="perimeter_mean" value="{{ input_values.perimeter_mean }}" min="-1" max="1" step="0.01" required>
+            </div>
+            <div class="mb-3">
+                <label for="area_mean " class="form-label">Area Mean</label>
+                <input type="number" name="area_mean" class="form-control input-field" id="area_mean" value="{{ input_values.area_mean }}" min="-1" max="1" step="0.01" required>
+            </div>
+            <div class="mb-3">
+                <label for="smoothness_mean" class="form-label">Smoothness Mean</label>
+                <input type="number" name="smoothness_mean" class="form-control input-field" id="smoothness_mean" value="{{ input_values.smoothness_mean }}" min="-1" max="1" step="0.01" required>
+            </div>
+            <div class="mb-3">
+                <label for="compactness_mean" class="form-label">Compactness Mean</label>
+                <input type="number" name="compactness_mean" class="form-control input-field" id="compactness_mean" value="{{ input_values.compactness_mean }}" min="-1" max="1" step="0.01" required>
+            </div>
+            <div class="mb-3">
+                <label for="concavity_mean" class="form-label">Concavity Mean</label>
+                <input type="number" name="concavity_mean" class="form-control input-field" id="concavity_mean" value="{{ input_values.concavity_mean }}" min="-1" max="1" step="0.01" required>
+            </div>
+            <div class="mb-3">
+                <label for="concave_points_mean" class="form-label">Concave Points Mean</label>
+                <input type="number" name="concave_points_mean" class="form-control input-field" id="concave_points_mean" value="{{ input_values.concave_points_mean }}" min="-1" max="1" step="0.01" required>
+            </div>
+            <div class="mb-3">
+                <label for="symmetry_mean" class="form-label">Symmetry Mean</label>
+                <input type="number" name="symmetry_mean" class="form-control input-field" id="symmetry_mean" value="{{ input_values.symmetry_mean }}" min="-1" max="1" step="0.01" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <form action="/new_data" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-secondary">New Data</button>
+        </form>
+
+        {% if message %}
+            <div class="card" style="width: 18rem; margin-top: 20px;">
+                {% if message == 'Cancrous' %}
+                    <img src="{{ url_for('static', filename='2.jpg') }}" class="card-img-top" alt="Cancerous Image">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ message }}</h5>
+                        <p class="card-text">You beat cancer by how you live, why you live, and in the manner in which you live.</p>
+                    </div>
+                {% else %}
+                    <img src="{{ url_for('static', filename='4.avif') }}" class="card-img-top" alt="Non-Cancerous Image">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ message }}</h5>
+                        <p class="card-text">Congratulations! Your journey has shown incredible strength, and this news is a beautiful reward.</p>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+    <footer class="footer">
+        <p>Contact Us:</p>
+        <p>Phone: +91 8059833854</p>
+        <p>Email: tiwanainfo@hospital.com</p>
+        <p>Address: 123 Tiwana Hospital, Shahabad, Haryana, 136135</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
